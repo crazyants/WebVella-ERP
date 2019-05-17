@@ -1,0 +1,46 @@
+﻿<table class="table table-bordered table-sm mt-5">
+	<tbody>
+		<tr>
+			<th width="200">Total billable</th>
+			<td>@(((decimal)ViewBag.overallBillableMinutes/60).ToString("n2"))</td>
+		</tr>
+		<tr>
+			<th>Total not billable</th>
+			<td>@(((decimal)ViewBag.overallNonBillableMinutes/60).ToString("n2"))</td>
+		</tr>
+	</tbody>
+</table>
+
+@foreach (var project in ViewBag.projects)
+{
+	<div class="mt-5">
+		<h3>@project["name"]</h3>
+		<table class="table table-bordered table-sm">
+			<thead>
+				<tr>
+					<th>subject</th>
+					<th width="120">type</th>
+					<th width="120">billable</th>
+					<th width="120">not-billable</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var task in ViewBag.tasks)
+				{
+					if ((Guid)task["project_id"] != (Guid)project["id"])
+					{
+						continue;
+					}
+					<tr>
+						<td>
+							<a target="_blank" href="/projects/tasks/tasks/r/@task["task_id"]/details">@task["task_subject"]</a>
+						</td>
+						<td>@task["task_type"]</td>
+						<td>@(((decimal)@task["billable_minutes"]/60).ToString("n2"))</td>
+						<td>@(((decimal)@task["non_billable_minutes"]/60).ToString("n2"))</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+}
